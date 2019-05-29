@@ -6,6 +6,29 @@ import java.lang.reflect.Field;
 /**
  * java的引用测试，包括软引用、弱引用、幻象引用
  *
+ *
+ * 知识点：
+ *  1、这几个引用对常量池中的数据不起作用，只能用于存放在堆中的对象，例如：DATA = "dataString"，GC后就不起作用。
+ *
+ *  2、软引用 -- SoftReference
+ *      引用的对象不会在GC后立即回收，
+ *      get()方法返回引用对象的数据；
+ *      回收的时机暂不清楚，在内存不足的时候，会被回收，防止抛出OutOfMemoryError异常
+ *      回收后引用对象会存放在ReferenceQueue队列中，然后队列数据也会被回收
+ *  3、弱引用 -- WeakReference
+ *      引用的对象会在GC后立即回收，
+ *      get()方法返回引用对象的数据；
+ *      回收后引用对象会存放在ReferenceQueue队列中，然后队列数据也会被回收
+ *
+ *  4、幻象引用 -- PhantomReference
+ *      引用的对象会在GC后立即回收，
+ *      get()方法返回null；
+ *      回收后引用对象会存放在ReferenceQueue队列中，然后队列数据也会被回收
+ *
+ *  5、强引用 -- new Object()
+ *      引用对象按照垃圾回收机制回收
+ *      内存不足时，宁可抛出OutOfMemoryError异常，也不会被立即回收
+ *
  * @author panjianghong
  * @created 2019-05-27 23:13:00
  */
@@ -18,9 +41,10 @@ public class ReferenceTest {
 
     ReferenceTest(ReferenceType referenceType) throws InterruptedException {
         FLAG = true;
-        //DATA = new String("dataString");
+        DATA = new String("dataString");
 
-        DATA = "dataString";
+        //DATA = "dataString";
+
 
         Reference reference = null;
 
